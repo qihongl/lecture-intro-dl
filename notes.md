@@ -15,7 +15,7 @@ Arrow keys / Space advance one build; left arrow reverses a build. R resets the 
 | Recurrent networks & temporal context | 24.5–42 | 17–25 |
 | Gated recurrence | 42–51 | 26–30 |
 | Convolutional networks | 51–68.5 | 31–39 |
-| Causal transformers | 68.5–87 | 40–49 |
+| Transformers & attention | 68.5–87 | 40–49 |
 | Consolidation | 87–90 | 50–51 |
 | Optional reference | Outside the 90 min | 52–52 |
 
@@ -327,15 +327,15 @@ The bounded statement matters: not a theorem that any optimization, task or arch
 
 Source: Yamins et al. (2014) · PNAS · doi:10.1073/pnas.1403112111
 
-## 40. A causal transformer
+## 40. Transformers: represent a word using its context
 
-Causal transformers · 68.5–70 min
+Transformers & attention · 68.5–70 min
 
-Compare sequential RNN states with direct attention links over a prefix. A causal transformer has a finite context window; it does not have unlimited memory. In training, token positions within a sequence can be processed in parallel; autoregressive generation still proceeds token by token.
+Introduce the goal before naming architectural variants: a word is represented using the words around it. Reuse the same four word-like tokens as the attention walkthrough. Begin with the words, reveal their starting vectors on build 1, then on build 2 show information flowing into the highlighted final word and an illustrative changed vector pattern. Only incoming context for this one selected word is drawn; this is not a full attention graph or proof that all transformers use only preceding words. Bar colors are hand-set illustrations, not a trained model or a computed attention output. The example does not claim that it refers to cat or that this is a coreference detector. Attention supplies a learned route for combining contextual information rather than carrying it only through successive recurrent states. The subsequent slides introduce position information and query/key/value computations. Reserve the word causal for the later next-word-prediction slide, where the no-peeking rule is visible and explicitly defined. Word-like tokens are used for readability; actual language models often use subword tokens. Source: Vaswani et al. (2017), https://arxiv.org/abs/1706.03762 . A GPT-style causal model has a finite context window. Training can process sequence positions in parallel while autoregressive generation proceeds token by token.
 
 ## 41. Words become vectors; positions matter
 
-Causal transformers · 70–72 min
+Transformers & attention · 70–72 min
 
 The walkthrough uses word-like tokens for readability; real GPT tokenizers may split a word into several subword tokens. GPT-2 uses learned position embeddings. Vector components have learned roles, not hand-assigned labels such as meaning or grammar.
 
@@ -343,13 +343,13 @@ Source: Radford et al. (2019) · GPT-2
 
 ## 42. A token asks for useful context
 
-Causal transformers · 72–74.5 min
+Transformers & attention · 72–74.5 min
 
 Reveal Q, K and V as three learned projections of the same representations. These verbal descriptions are mnemonics, not literal introspection by the network. In this toy head, all numbers are hand specified, not GPT-2 weights. The arithmetic is exact; the semantic interpretation is illustrative.
 
 ## 43. Turn match scores into a weighted mixture
 
-Causal transformers · 74.5–77.5 min
+Transformers & attention · 74.5–77.5 min
 
 Default query=token it (fourth token) in The / cat / saw / it. q=[1,0], k=[[0,0],[2,0],[0,1],[1,0]], values=[[0,0],[1,0],[0,1],[0.5,0.5]]. Score=q·k/√2. Weights=[0.122830,0.505229,0.122830,0.249112]; they sum to1. The mixture is[0.629785,0.247386]. Change query and observe recomputed weights. This is not a trained coreference detector.
 
@@ -357,11 +357,11 @@ Question: Does the output simply copy the value for “cat”?
 
 Expected answer: No. It combines the available values according to their weights.
 
-## 44. Hide future tokens in a causal model
+## 44. Next-word prediction: no peeking ahead
 
-Causal transformers · 77.5–79.5 min
+Transformers & attention · 77.5–79.5 min
 
-Read matrix rows as queries and columns as keys. A causal mask is triangular. Choose a row to reveal available positions. Masked score=−∞ means zero weight after softmax, not a negative contribution. Token representations at time t predict token t+1. Don’t conflate a mask with a sigmoid memory gate.
+Now introduce the term causal: the representation at a position cannot use later inputs. This prevents access to the answer while learning to predict the next token. Read matrix rows as queries and columns as keys. A causal mask is triangular. Start with the cat query row to match the next-word prediction question; saw and it are then unavailable. Choose another row to reveal its available positions. Masked score=−∞ means zero weight after softmax, not a negative contribution. Token representations at time t predict token t+1. Don’t conflate a mask with a sigmoid memory gate.
 
 Question: When predicting after “The cat”, may the model inspect “saw”?
 
@@ -369,7 +369,7 @@ Expected answer: No. That future token must be hidden for this prediction.
 
 ## 45. Attention is one part of a block
 
-Causal transformers · 79.5–81.5 min
+Transformers & attention · 79.5–81.5 min
 
 Build attention first, then feedforward layer, then residual paths. Explain feedforward parameters are shared across positions but no token mixing occurs inside that sublayer. This diagram simplifies GPT-2’s pre-normalization block. Repeat blocks to form depth; finish with a vocabulary prediction head. Optional equations make the order precise. Keep normalization in presenter notes: layer normalization rescales components within each token representation and has learned scale and offset parameters. It is omitted from the visible simplified diagram. Focus the main explanation on the residual addition that is actually shown.
 
@@ -377,13 +377,13 @@ Source: Vaswani et al. (2017); Radford et al. (2019)
 
 ## 46. Several heads, several learned mixtures
 
-Causal transformers · 81.5–82 min
+Transformers & attention · 81.5–82 min
 
 Two teaching mixtures over the same tokens illustrate distinct weights, not measured GPT head behavior. Do not label one head syntax and another semantics as an empirical fact. Attention weights alone are not a causal explanation of model behavior. The selected query is the token “it”. Each bar is an attention weight for the token directly above it; each head’s weights sum to 1. Both heads attend to the same available tokens but use different learned projections. The two colored rows are separate heads, not different time steps.
 
 ## 47. Compare language models with brain responses
 
-Causal transformers · 82–83.5 min
+Transformers & attention · 82–83.5 min
 
 Schrimpf et al. benchmarked43 language models against two fMRI datasets and one ECoG dataset; also reading times. Sentence/word aggregation and fitting differ by dataset. This diagram teaches the shared comparison logic, not a claim all stimuli were identical across studies. Neural readout fitting is distinct from language-model pretraining. The anatomical human-brain image is a generic symbol for the neural-recording branch, not measured activation data or a localization map. Image: NIAID Visual & Medical Arts, Ryan Kissinger (2024), Brain Lateral, NIH BioArt BIOART-000060, public domain, courtesy of NIAID; https://bioart.niaid.nih.gov/bioart/60. Use separate model and participant branches. Compare is where predicted responses meet recorded responses. The model does not produce or cause the participant recording. Fit the readout on training stimuli and evaluate it on held-out stimuli.
 
@@ -391,7 +391,7 @@ Source: Schrimpf et al. (2021) · PNAS · doi:10.1073/pnas.2105646118
 
 ## 48. Next-word performance and brain predictivity
 
-Causal transformers · 83.5–86 min
+Transformers & attention · 83.5–86 min
 
 Published Figure3A, article p.5. The x-axis decreases left→right; make this explicit before discussing trend. y is normalized neural predictivity aggregated across three datasets. r=0.44 in the plotted aggregate. The inset separates datasets: ECoG association positive but not significant. Preserve all points and inset. The paper identifies error bars as median absolute deviation over subject scores (Fig.2 caption: here and elsewhere), not95% CIs; do not relabel them. Normalization by a noise ceiling does not mean all raw neural variance is explained. Explain perplexity as the model’s average uncertainty about the next word: a lower score means it assigns more probability to the words that actually follow. It is not classification accuracy. The plotted neural scores are normalized relative to an estimated noise ceiling and aggregated across datasets; keep that technical detail in narration rather than adding another visual definition.
 
@@ -399,7 +399,7 @@ Source: Schrimpf et al. (2021) · PNAS · doi:10.1073/pnas.2105646118
 
 ## 49. A predictive model is a testable hypothesis
 
-Causal transformers · 86–87 min
+Transformers & attention · 86–87 min
 
 Some untrained models also had substantial neural predictivity after fitting a readout. This limits a training-only explanation. Treat the work as evidence about candidate representational computations, not direct identification of the brain algorithm or a claim of biological self-attention.
 
