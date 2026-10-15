@@ -1,6 +1,6 @@
 # Deep learning architectures
 
-90 minutes including manually controlled demonstrations and discussion. 51 teaching slides; 1 optional reference slides. Formula reference pages are in a separate document.
+90 minutes including manually controlled demonstrations and discussion. 50 teaching slides; 1 optional reference slides. Formula reference pages are in a separate document.
 
 ## Presenter controls
 
@@ -15,9 +15,9 @@ Arrow keys / Space advance one build; left arrow reverses a build. R resets the 
 | Recurrent networks & temporal context | 24.5–42 | 17–25 |
 | Gated recurrence | 42–51 | 26–30 |
 | Convolutional networks | 51–68.5 | 31–39 |
-| Transformers & attention | 68.5–87 | 40–49 |
-| Consolidation | 87–90 | 50–51 |
-| Optional reference | Outside the 90 min | 52–52 |
+| Transformers & attention | 68.5–87 | 40–48 |
+| Consolidation | 87–90 | 49–50 |
+| Optional reference | Outside the 90 min | 51–51 |
 
 ## Demonstration solutions
 
@@ -331,27 +331,17 @@ Source: Yamins et al. (2014) · PNAS · doi:10.1073/pnas.1403112111
 
 Transformers & attention · 68.5–69.5 min
 
-Introduce the goal before naming architectural variants: a word is represented using the words around it. Reuse the same four word-like tokens as the attention walkthrough. Begin with the words, reveal their starting vectors on build 1, then on build 2 show information flowing into the highlighted final word and an illustrative changed vector pattern. Only incoming context for this one selected word is drawn; this is not a full attention graph or proof that all transformers use only preceding words. Bar colors are hand-set illustrations, not a trained model or a computed attention output. The example does not claim that it refers to cat or that this is a coreference detector. Attention supplies a learned route for combining contextual information rather than carrying it only through successive recurrent states. The next slide introduces query/key/value computations. GPT-2 adds learned position embeddings before the first block; position information is implicit in this overview. Vector components have learned roles rather than hand-assigned meanings. Reserve the word causal for the later next-word-prediction slide, where the no-peeking rule is visible and explicitly defined. Word-like tokens are used for readability; actual language models often use subword tokens. Source: Vaswani et al. (2017), https://arxiv.org/abs/1706.03762 . A GPT-style causal model has a finite context window. Training can process sequence positions in parallel while autoregressive generation proceeds token by token.
+Introduce the goal before naming architectural variants: a word is represented using the words around it. Reuse the same four word-like tokens as the attention walkthrough. Begin with the words, reveal their starting vectors on build 1, then on build 2 show information flowing into the highlighted final word and an illustrative changed vector pattern. Only incoming context for this one selected word is drawn; this is not a full attention graph or proof that all transformers use only preceding words. Bar colors are hand-set illustrations, not a trained model or a computed attention output. The example does not claim that it refers to cat or that this is a coreference detector. Attention supplies a learned route for combining contextual information rather than carrying it only through successive recurrent states. The next slide shows how attention weights control information flowing into the selected word. GPT-2 adds learned position embeddings before the first block; position information is implicit in this overview. Vector components have learned roles rather than hand-assigned meanings. Reserve the word causal for the later next-word-prediction slide, where the no-peeking rule is visible and explicitly defined. Word-like tokens are used for readability; actual language models often use subword tokens. Source: Vaswani et al. (2017), https://arxiv.org/abs/1706.03762 . A GPT-style causal model has a finite context window. Training can process sequence positions in parallel while autoregressive generation proceeds token by token.
 
-## 41. A token asks for useful context
+## 41. Attention weights control the information flow
 
 Transformers & attention · 69.5–72 min
 
-Show a representation vector under each token. For this exact toy calculation the four starting representations are different four-component one-hot basis vectors, so the shared learned linear projections can produce the shown two-component Q, K and V vectors. These basis vectors are an illustrative input to this head, not GPT-2 embeddings. A shared projection module produces a query, key and value for every token. Reveal the three rows in order. Highlight the selected token and its query in blue; its other projections remain in their own token column. Changing the dropdown selects the query used in the next calculation; it does not turn the other tokens into non-query tokens. Queries, keys and values are token-dependent vectors, not the projection weights. Future tokens can have projections, but the next slides explicitly exclude them when forming the selected causal mixture. These are three learned linear projections, with normalization omitted from this teaching diagram. The colored vector strips schematically indicate components, not trained activations. See Transformer Explainer, https://poloclub.github.io/transformer-explainer/ . These verbal descriptions are mnemonics, not literal introspection by the network. In this toy head, all numbers are hand specified, not GPT-2 weights. The arithmetic is exact; the semantic interpretation is illustrative.
+Introduce attention through information flow rather than uninterpretable feature coordinates. Build 0 shows the four words. Build 1 shows attention weights as bars and percentages, aligned with their source words. Use the dropdown labelled Word being updated to choose the destination word; its word node is highlighted in blue. Build 2 shows an info circle for each available word and paths into an addition node. An info circle stands for the learned information a word can contribute, formally its value vector; it does not depict vector dimensions or component magnitudes. Path width encodes its attention weight, not the magnitude of its value vector or its causal effect on the final prediction, with a small minimum visible stroke; a masked future word has zero weight and no path. Build 3 reveals the combined attention update for the selected word. This is the output of one head, before the multi-head output projection and residual addition; it is not a vocabulary probability or a predicted next word. Percentages are rounded for display; the calculation uses full precision. The hand-set example is not a trained language model. In The cat saw it, cat is the subject and it is the object; the sentence does not establish an antecedent for it. There is no architectural requirement that a head assign a large cat-to-it weight, and high attention alone does not prove a grammatical dependency. Keep the numerical verification in narration or the formula reference: default query q=[1,0], keys=[[0,0],[2,0],[0,1],[1,0]], values=[[0,0],[1,0],[0,1],[0.5,0.5]]. Scaled match scores are q dot k divided by sqrt(2): [0,1.414213562,0,0.707106781]. Softmax gives [0.122829520,0.505228570,0.122829520,0.249112390]. Weighted value contributions are [0,0], [0.505228570,0], [0,0.122829520], [0.124556195,0.124556195]. Adding their respective components gives [0.629784765,0.247385715]. All previously displayed arithmetic was consistent; the change removes unsupported semantic interpretations and unnecessary arithmetic from the speaking slide. The same causal exclusion rule already applies here and is unpacked on the next slide. Source: Vaswani et al. (2017), section 3.2.1, https://arxiv.org/abs/1706.03762 .
 
-## 42. Turn match scores into a weighted mixture
+## 42. Next-word prediction: no peeking ahead
 
-Transformers & attention · 72–74.5 min
-
-Default query=token it (fourth token) in The / cat / saw / it. q=[1,0], k=[[0,0],[2,0],[0,1],[1,0]], values=[[0,0],[1,0],[0,1],[0.5,0.5]]. Score=q·k/√2. Weights=[0.122830,0.505229,0.122830,0.249112]; they sum to1. The mixture is[0.629785,0.247386]. Reveal the scaled match scores, then the softmax weights, then the individual weighted contributions and their sum. Each column retains the same token throughout. The contribution from token j is weight[j] times its value vector, component by component. Values are rounded to three decimals for display; the sum uses full precision. Excluded future tokens have exactly zero contribution. Change query and observe recomputed weights, contributions and sum. This teaching example already applies the causal rule, which is unpacked on the next slide. This is not a trained coreference detector.
-
-Question: Does the output simply copy the value for “cat”?
-
-Expected answer: No. It combines the available values according to their weights.
-
-## 43. Next-word prediction: no peeking ahead
-
-Transformers & attention · 74.5–76 min
+Transformers & attention · 72–73.5 min
 
 Now introduce the term causal: the representation at a position cannot use later inputs. This prevents access to the answer while learning to predict the next token. Read matrix rows as queries and columns as keys. A causal mask is triangular. Start with the cat query row to match the next-word prediction question; saw and it are then unavailable. Choose another row to reveal its available positions. Masked score=−∞ means zero weight after softmax, not a negative contribution. Token representations at time t predict token t+1. Don’t conflate a mask with a sigmoid memory gate.
 
@@ -359,29 +349,29 @@ Question: When predicting after “The cat”, may the model inspect “saw”?
 
 Expected answer: No. That future token must be hidden for this prediction.
 
-## 44. Attention is one part of a block
+## 43. Attention is one part of a block
 
-Transformers & attention · 76–78 min
+Transformers & attention · 73.5–75.5 min
 
 Replace the former unit-like Attn and MLP circles with rectangular processing modules. Show H as a group of four token-vector strips, with the same positions at the input and output. Arrows in this diagram carry the whole sequence of representations, not a single scalar. Build attention first, then a bank of four independent MLP applications, then residual paths and the output to the next block. The four small MLP boxes depict applications of the same feedforward parameters at different positions; they are not four independently trained MLPs. Residual plus circles are elementwise vector additions across the sequence. Both attention and feedforward updates are added to the representation entering their own sublayer. Explain feedforward parameters are shared across positions but no token mixing occurs inside that sublayer. This diagram simplifies GPT-2’s pre-normalization block. Repeat blocks to form depth; finish with a vocabulary prediction head. Optional equations make the order precise. Keep normalization in presenter notes: layer normalization rescales components within each token representation and has learned scale and offset parameters. It is omitted from the visible simplified diagram. Focus the main explanation on the residual addition that is actually shown.
 
 Source: Vaswani et al. (2017); Radford et al. (2019)
 
-## 45. Several heads, several learned mixtures
+## 44. Several heads, several learned mixtures
 
-Transformers & attention · 78–78.5 min
+Transformers & attention · 75.5–76 min
 
 Two teaching mixtures over the same tokens illustrate distinct weights, not measured GPT head behavior. Do not label one head syntax and another semantics as an empirical fact. Attention weights alone are not a causal explanation of model behavior. The selected query is the token “it”. Each bar is an attention weight for the token directly above it; each head’s weights sum to 1. Blue and orange distinguish heads consistently. The final build shows one output vector for each head, joins those outputs, and applies a learned output projection to produce one attention update. The vector-strip components are schematic and are not computed from the displayed weight rows; each real head also has its own value projection. The output projection can mix and rescale components; it is not simply an average of the head outputs. Both heads attend to the same available tokens but use different learned projections. The two colored rows are separate heads, not different time steps.
 
-## 46. Transformer demos
+## 45. Transformer demos
 
-Transformers & attention · 78.5–82 min
+Transformers & attention · 76–82 min
 
-Use Transformer Explainer as the main live class demo: https://poloclub.github.io/transformer-explainer/ . The preview is an unaltered screenshot of its preset example captured on October 14, 2026, while the local GPT-2 download was pending; it is not a claim that custom inference was tested. Open the site ahead of class and allow its model download to finish. Start from its preset sentence, inspect one query row and change the selected head; then connect attention output to the token-wise MLP and next-token probabilities. GPT-2 small is a causal decoder-only model. Use the 3Blue1Brown video, Attention in transformers, step-by-step (Deep Learning Chapter 6), https://www.youtube.com/watch?v=eMlx5fFNoYc , for the geometric intuition. Optional BertViz, https://github.com/jessevig/bertviz , allows attention-head inspection; choose a GPT-2 causal example when comparing with this walkthrough. Its familiar BERT example is bidirectional and is not the same mask as GPT-2. BertViz: Vig (2019), https://aclanthology.org/P19-3007/ . Attention weights alone do not establish a causal account of the model prediction. All three links are clickable in the HTML and printable PDF. Three and a half minutes are reserved for the live demonstration, including the time freed by removing the separate embedding slide, so the complete lecture remains 90 minutes. Screenshot courtesy of the Georgia Tech Polo Club Transformer Explainer team; the tool is linked directly rather than embedded so the slide does not depend on a network connection to load.
+Use Transformer Explainer as the main live class demo: https://poloclub.github.io/transformer-explainer/ . The preview is an unaltered screenshot of its preset example captured on October 14, 2026, while the local GPT-2 download was pending; it is not a claim that custom inference was tested. Open the site ahead of class and allow its model download to finish. Start from its preset sentence, inspect one query row and change the selected head; then connect attention output to the token-wise MLP and next-token probabilities. GPT-2 small is a causal decoder-only model. Use the 3Blue1Brown video, Attention in transformers, step-by-step (Deep Learning Chapter 6), https://www.youtube.com/watch?v=eMlx5fFNoYc , for the geometric intuition. Optional BertViz, https://github.com/jessevig/bertviz , allows attention-head inspection; choose a GPT-2 causal example when comparing with this walkthrough. Its familiar BERT example is bidirectional and is not the same mask as GPT-2. BertViz: Vig (2019), https://aclanthology.org/P19-3007/ . Attention weights alone do not establish a causal account of the model prediction. All three links are clickable in the HTML and printable PDF. Six minutes are reserved for the live demonstration within the 90-minute lecture. Screenshot courtesy of the Georgia Tech Polo Club Transformer Explainer team; the tool is linked directly rather than embedded so the slide does not depend on a network connection to load.
 
 Source: Transformer Explainer · Georgia Tech Polo Club
 
-## 47. Compare language models with brain responses
+## 46. Compare language models with brain responses
 
 Transformers & attention · 82–83.5 min
 
@@ -389,7 +379,7 @@ Schrimpf et al. benchmarked43 language models against two fMRI datasets and one 
 
 Source: Schrimpf et al. (2021) · PNAS · doi:10.1073/pnas.2105646118
 
-## 48. Next-word performance and brain predictivity
+## 47. Next-word performance and brain predictivity
 
 Transformers & attention · 83.5–86 min
 
@@ -397,7 +387,7 @@ Published Figure3A, article p.5. The x-axis decreases left→right; make this ex
 
 Source: Schrimpf et al. (2021) · PNAS · doi:10.1073/pnas.2105646118
 
-## 49. A predictive model is a testable hypothesis
+## 48. A predictive model is a testable hypothesis
 
 Transformers & attention · 86–87 min
 
@@ -405,19 +395,19 @@ Some untrained models also had substantial neural predictivity after fitting a r
 
 Source: Schrimpf et al. (2021) · PNAS · doi:10.1073/pnas.2105646118
 
-## 50. Choose the information flow
+## 49. Choose the information flow
 
 Consolidation · 87–88 min
 
 Build the comparison rows. Architecture is often combined in practice; the rows describe characteristic operations, not exclusive application domains. Every family learns parameters and needs generalization checks. Ask students to describe the information each operation makes available.
 
-## 51. Neural networks as model organisms
+## 50. Neural networks as model organisms
 
 Consolidation · 88–90 min
 
 Close the lecture with the two-way exchange between AI and neuroscience. The minute freed by removing the separate closing-question slide is reserved for explaining this figure. Start with an explicit multilayer neural network and the anatomical human brain. Build 1 reveals the blue network-to-brain arrow: Test brain hypotheses. Neural networks are tractable computational test beds: vary architecture, learning objectives or experience; inspect internal representations; perturb units or connections; compare behavioral and neural predictions with independent biological evidence. The phrase model organism is an analogy to experimental systems, not a claim that an artificial network is a biological organism or an exact copy of the brain. Build 2 adds the orange brain-to-network arrow: Inspire better AI. Computational principles learned from neuroscience can suggest architectures, learning rules and memory mechanisms; whether these improve AI must be tested. The two directions describe scientific exchange, not physical causation between the depicted objects. The network drawing is schematic, not a trained model or measured activity. Keep the on-slide wording to the title, two object labels and two arrow captions; narrate the details. References: Richards et al. (2019), A deep learning framework for neuroscience, Nature Neuroscience 22:1761–1770, https://doi.org/10.1038/s41593-019-0520-2 ; Hassabis, Kumaran, Summerfield & Botvinick (2017), Neuroscience-Inspired Artificial Intelligence, Neuron 95:245–258, https://doi.org/10.1016/j.neuron.2017.06.011 . Brain image: NIAID Visual & Medical Arts, Ryan Kissinger (2024), Brain Lateral, NIH BioArt BIOART-000060, public domain, courtesy of NIAID; https://bioart.niaid.nih.gov/bioart/60.
 
-## 52. References
+## 51. References
 
 Optional reference · optional
 
