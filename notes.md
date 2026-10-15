@@ -123,11 +123,13 @@ Source: Rogers & McClelland (2004), Semantic Cognition · Chs. 2–3 · Figure 2
 
 Multilayer networks · 19.5–20.5 min
 
-Use the illustrative matrix only to explain how to read the forthcoming original figure. Values are hand specified, not trained or biological recordings. Two plants share a pattern; two birds share a different one. A unit can contribute to multiple items. This matrix previews the Representation layer in the Rogers–McClelland architecture, not its separate later Hidden layer. The forthcoming source figure shows eight learned Representation-layer units.
+Preview the epoch 150 column of the following original Figure 3.1 using pine, oak, robin and canary in the same item order and the same left-to-right order of eight Representation-layer units. The heatmap approximates the relative heights of the published bars; it is not a new model simulation or an exact recovery of numerical activations. Pixel heights were read from work/deep-learning/sources/semantic-figure.png. Baselines: pine y=100, oak y=207, robin y=530, canary y=637. Approximate heights in pixels: pine [61,30,34,59,14,10,33,28]; oak [61,27,46,72,16,14,28,24]; robin [22,53,47,56,41,69,51,24]; canary [25,44,54,47,39,68,60,16]. Divide every row by the same maximum of 72 pixels for a shared sequential color scale, rather than normalizing each item separately. Pine and oak are strongest around units 1 and 4; robin and canary share stronger activity around unit 6. Each column is the same unit across all rows and on the following slide. The source figure depicts model Representation-layer activity, not measured biological neurons or the separate later Hidden layer. No uncertainty interval applies to this approximate visual transcription of a deterministic model snapshot.
 
 Question: Does a similar pattern require one “plant neuron”?
 
 Expected answer: No. Similarity can be distributed across several units.
+
+Source: Rogers & McClelland (2004), Semantic Cognition · Chs. 2–3 · Figure 3.1 · epoch 150 (approximation)
 
 ## 15. Learning separates semantic structure
 
