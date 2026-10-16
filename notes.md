@@ -157,29 +157,29 @@ Start with Olah’s rolled RNN, then show the single-tanh repeating module. Intr
 
 Source: Christopher Olah (2015) · Understanding LSTM Networks
 
-## 19. Unroll the network through time
+## 19. How do we recognize word boundaries?
 
-Recurrent networks & temporal context · 28–30 min
-
-Reveal three time steps manually using the same authored architecture and node positions as the later Elman example. Every column is a moment, not a new layer with new weights. Inputs x1, x2 and x3 appear above hidden states h1, h2 and h3; prediction vectors appear below. The separate h0 node is the initial hidden state before x1, consistent with the Elman example. Each circle represents a vector, not one biological neuron. The hidden-to-hidden links carry the previous state; recurrent and prediction weights are reused at every time step. The Elman slide adds word labels and next-word targets to this identical diagram. Shared weights make variable-length sequences possible. This is an authored schematic of recurrence, not a reproduced source figure.
-
-Source: Christopher Olah (2015) · Understanding LSTM Networks
-
-## 20. How do we recognize word boundaries?
-
-Recurrent networks & temporal context · 30–31 min
+Recurrent networks & temporal context · 28–29 min
 
 Start with the natural-language example pretty baby from the introduction to Saffran, Aslin & Newport (1996), Science 274:1926–1928, https://infantlearning.waisman.wisc.edu/wp-content/uploads/sites/817/2017/02/SaffranAslinNewport1996.pdf . The letter groups pre, tty, ba and by are readable labels for syllables in spoken pretty baby, not a claim that a learner segments written letters. Read the phrase aloud fluently without inserting a deliberate pause. Build 0 shows only the continuous stream …prettybaby… . Build 1 shows pre → tty → ba → by: blue arrows for the higher-probability within-word transitions and an orange arrow for the lower-probability tty → ba transition. Higher and lower are qualitative, following the original motivating example; no numerical probabilities were estimated from an English corpus or this one utterance. Probabilities depend on the preceding syllable across many utterances, not just the displayed phrase. Build 2 adds brackets for pretty and baby and a dashed orange boundary at the low transition. A drop is a possible segmentation cue, not a guarantee of a boundary in every natural-language sequence; other cues also contribute. Keep the stream label, arrow row, color meanings, bracket spans, dashed boundary and concluding caption in the same positions as the following artificial-language slide. Transition directly to the next slide: Saffran and colleagues isolated the same cue using an artificial language with controlled transition probabilities.
 
 Source: Saffran, Aslin & Newport (1996) · “pretty baby” example
 
-## 21. Finding word boundaries without pauses
+## 20. Finding word boundaries without pauses
 
-Recurrent networks & temporal context · 31–32.5 min
+Recurrent networks & temporal context · 29–30.5 min
 
-Saffran, Aslin & Newport (1996), Statistical Learning by 8-Month-Old Infants, Science 274:1926–1928. https://pubmed.ncbi.nlm.nih.gov/8943209/ ; doi:10.1126/science.274.5294.1926. Immediately map the preceding pretty baby example to the continuous orthographic example bidakupadotigolabubidaku from the paper. Use the same layout and colors: the pre → tty transition maps to within-word transitions such as bi → da, while tty → ba maps to ku → pa at the central orange boundary. The infants heard synthesized continuous speech with no pauses, stress differences or other acoustic boundary cues. Build 1 expands the first two three-syllable words to show next-syllable predictability: within-word transitions 1.0; between-word transitions 0.33 in experiment 1, where four words occurred in random order with no immediate repetitions. Percentages summarize the familiarization corpus, not observations from the short displayed snippet or a fitted neural network. Build 2 marks bidaku and padoti as the underlying word groups; the marks are explanatory overlays, not pauses in the auditory input. Twenty-four infants in experiment 1 distinguished familiar words from nonwords. A separate group of twenty-four infants in experiment 2 distinguished words from part-words spanning a word boundary, listening longer to part-words (7.60 versus 6.77 seconds); this is the test finding on the slide. Experiment 2 used different four-word inventories in its two counterbalanced conditions. The tested part-words had a boundary transition probability of 0.33, followed by a within-word transition of 1.0. Do not present the illustrated experiment-1 sequence as its exact test material. Do not claim that the study demonstrated an Elman network in infants, that all natural boundaries have lower transition probability, or that statistical learning is the only cue to natural speech segmentation. Transition: how might a network learn such sequential regularities? The next slide introduces Elman’s prediction-learning approach. The next-word example is from Elman’s separate artificial-sentence experiment, not a simulation of Saffran’s infant study.
+Saffran, Aslin & Newport (1996), Statistical Learning by 8-Month-Old Infants, Science 274:1926–1928. https://pubmed.ncbi.nlm.nih.gov/8943209/ ; doi:10.1126/science.274.5294.1926. Immediately map the preceding pretty baby example to the continuous orthographic example bidakupadotigolabubidaku from the paper. Use the same layout and colors: the pre → tty transition maps to within-word transitions such as bi → da, while tty → ba maps to ku → pa at the central orange boundary. The infants heard synthesized continuous speech with no pauses, stress differences or other acoustic boundary cues. Build 1 expands the first two three-syllable words to show next-syllable predictability: within-word transitions 1.0; between-word transitions 0.33 in experiment 1, where four words occurred in random order with no immediate repetitions. Percentages summarize the familiarization corpus, not observations from the short displayed snippet or a fitted neural network. Build 2 marks bidaku and padoti as the underlying word groups; the marks are explanatory overlays, not pauses in the auditory input. Twenty-four infants in experiment 1 distinguished familiar words from nonwords. A separate group of twenty-four infants in experiment 2 distinguished words from part-words spanning a word boundary, listening longer to part-words (7.60 versus 6.77 seconds); this is the test finding on the slide. Experiment 2 used different four-word inventories in its two counterbalanced conditions. The tested part-words had a boundary transition probability of 0.33, followed by a within-word transition of 1.0. Do not present the illustrated experiment-1 sequence as its exact test material. Do not claim that the study demonstrated an Elman network in infants, that all natural boundaries have lower transition probability, or that statistical learning is the only cue to natural speech segmentation. Transition: how might a network learn such sequential regularities? The next slide unrolls a recurrent network through time, before the following Elman prediction-learning example. The next-word example is from Elman’s separate artificial-sentence experiment, not a simulation of Saffran’s infant study.
 
 Source: Saffran, Aslin & Newport (1996) · Statistical Learning by 8-Month-Old Infants
+
+## 21. Unroll the network through time
+
+Recurrent networks & temporal context · 30.5–32.5 min
+
+Reveal three time steps manually using the same authored architecture and node positions as the later Elman example. Every column is a moment, not a new layer with new weights. Inputs x1, x2 and x3 appear above hidden states h1, h2 and h3; prediction vectors appear below. The separate h0 node is the initial hidden state before x1, consistent with the Elman example. Each circle represents a vector, not one biological neuron. The hidden-to-hidden links carry the previous state; recurrent and prediction weights are reused at every time step. The Elman slide adds word labels and next-word targets to this identical diagram. Shared weights make variable-length sequences possible. This is an authored schematic of recurrence, not a reproduced source figure.
+
+Source: Christopher Olah (2015) · Understanding LSTM Networks
 
 ## 22. Elman: predict the next word
 
