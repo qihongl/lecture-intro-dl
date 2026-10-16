@@ -4,7 +4,7 @@
 
 ## Presenter controls
 
-Arrow keys / Space advance one build; left arrow reverses a build. R resets the current slide and its demo. G opens the slide index, N opens synchronized presenter notes, F enters full screen, E enables local text editing. Ctrl/Cmd+S in edit mode saves a self-contained edited copy. No demonstration runs automatically. All assets and fonts are embedded; internet is needed only to follow reference links.
+Arrow keys / Space advance one build; left arrow reverses a build. R resets the current slide and its demo. G opens the slide index, F enters full screen, E enables local text editing. Presenter-note controls are currently disabled; the presenter HTML and notes remain available as separate files. Ctrl/Cmd+S in edit mode saves a self-contained edited copy. No demonstration runs automatically. All assets and fonts are embedded; internet is needed only to follow reference links.
 
 ## Timing
 
