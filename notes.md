@@ -1,6 +1,6 @@
 # Deep learning architectures
 
-85 minutes including manually controlled demonstrations and discussion. 47 teaching slides; 1 optional reference slides. Formula reference pages are in a separate document.
+86 minutes including manually controlled demonstrations and discussion. 48 teaching slides; 1 optional reference slides. Formula reference pages are in a separate document.
 
 ## Presenter controls
 
@@ -12,12 +12,12 @@ Arrow keys / Space advance one build; left arrow reverses a build. R resets the 
 |---|---|---|
 | Recap | 0–5 | 1–3 |
 | Multilayer networks | 5–24.5 | 4–16 |
-| Recurrent networks & temporal context | 24.5–39 | 17–24 |
-| Gated recurrence | 39–46 | 25–28 |
-| Convolutional networks | 46–63.5 | 29–37 |
-| Transformers & attention | 63.5–82 | 38–45 |
-| Consolidation | 82–85 | 46–47 |
-| Optional reference | Outside the 85 min | 48–48 |
+| Recurrent networks & temporal context | 24.5–40 | 17–25 |
+| Gated recurrence | 40–47 | 26–29 |
+| Convolutional networks | 47–64.5 | 30–38 |
+| Transformers & attention | 64.5–83 | 39–46 |
+| Consolidation | 83–86 | 47–48 |
+| Optional reference | Outside the 86 min | 49–49 |
 
 ## Demonstration solutions
 
@@ -163,45 +163,51 @@ Source: Saffran, Aslin & Newport (1996) · “pretty baby” example
 
 Recurrent networks & temporal context · 27.5–29 min
 
-Saffran, Aslin & Newport (1996), Statistical Learning by 8-Month-Old Infants, Science 274:1926–1928. https://pubmed.ncbi.nlm.nih.gov/8943209/ ; doi:10.1126/science.274.5294.1926. Immediately map the preceding pretty baby example to the continuous orthographic example bidakupadotigolabubidaku from the paper. Use the same layout and colors: the pre → tty transition maps to within-word transitions such as bi → da, while tty → ba maps to ku → pa at the central orange boundary. The infants heard synthesized continuous speech with no pauses, stress differences or other acoustic boundary cues. Build 1 expands the first two three-syllable words to show next-syllable predictability: within-word transitions 1.0; between-word transitions 0.33 in experiment 1, where four words occurred in random order with no immediate repetitions. Percentages summarize the familiarization corpus, not observations from the short displayed snippet or a fitted neural network. Build 2 marks bidaku and padoti as the underlying word groups; the marks are explanatory overlays, not pauses in the auditory input. Twenty-four infants in experiment 1 distinguished familiar words from nonwords. A separate group of twenty-four infants in experiment 2 distinguished words from part-words spanning a word boundary, listening longer to part-words (7.60 versus 6.77 seconds); this is the test finding on the slide. Experiment 2 used different four-word inventories in its two counterbalanced conditions. The tested part-words had a boundary transition probability of 0.33, followed by a within-word transition of 1.0. Do not present the illustrated experiment-1 sequence as its exact test material. Do not claim that the study demonstrated an Elman network in infants, that all natural boundaries have lower transition probability, or that statistical learning is the only cue to natural speech segmentation. Transition: how might a network learn such sequential regularities? The next slide unrolls a recurrent network through time, before the following Elman prediction-learning example. The next-word example is from Elman’s separate artificial-sentence experiment, not a simulation of Saffran’s infant study.
+Saffran, Aslin & Newport (1996), Statistical Learning by 8-Month-Old Infants, Science 274:1926–1928. https://pubmed.ncbi.nlm.nih.gov/8943209/ ; doi:10.1126/science.274.5294.1926. Immediately map the preceding pretty baby example to the continuous orthographic example bidakupadotigolabubidaku from the paper. Use the same layout and colors: the pre → tty transition maps to within-word transitions such as bi → da, while tty → ba maps to ku → pa at the central orange boundary. The infants heard synthesized continuous speech with no pauses, stress differences or other acoustic boundary cues. Build 1 expands the first two three-syllable words to show next-syllable predictability: within-word transitions 1.0; between-word transitions 0.33 in experiment 1, where four words occurred in random order with no immediate repetitions. Percentages summarize the familiarization corpus, not observations from the short displayed snippet or a fitted neural network. Build 2 marks bidaku and padoti as the underlying word groups; the marks are explanatory overlays, not pauses in the auditory input. Twenty-four infants in experiment 1 distinguished familiar words from nonwords. A separate group of twenty-four infants in experiment 2 distinguished words from part-words spanning a word boundary, listening longer to part-words (7.60 versus 6.77 seconds); this is the test finding on the slide. Experiment 2 used different four-word inventories in its two counterbalanced conditions. The tested part-words had a boundary transition probability of 0.33, followed by a within-word transition of 1.0. Do not present the illustrated experiment-1 sequence as its exact test material. Do not claim that the study demonstrated an Elman network in infants, that all natural boundaries have lower transition probability, or that statistical learning is the only cue to natural speech segmentation. Transition: the next slide shows a trained recurrent model whose prediction errors track boundaries after a single 540-syllable exposure. We then unroll that architecture through time before the separate Elman next-word example. The next-word example is from Elman’s separate artificial-sentence experiment, not a simulation of Saffran’s infant study.
 
 Source: Saffran, Aslin & Newport (1996) · Statistical Learning by 8-Month-Old Infants
 
-## 20. Unroll the network through time
+## 20. Prediction error rises at word boundaries
 
-Recurrent networks & temporal context · 29–31 min
+Recurrent networks & temporal context · 29–30 min
+
+Classroom simulation: https://github.com/qihongl/demo-elman-1990 . This is a newly trained Elman recurrent network, not a figure or neural measurement from Saffran et al. or Elman (1990). Use the original Experiment 1A inventory: tupiro (tu pi ro), golabu (go la bu), bidaku (bi da ku), padoti (pa do ti). Each model sees one 180-word / 540-syllable stream, 45 copies per word, in random order without immediate word repetitions. The model receives 12 atomic syllable identities and no word-boundary labels. It predicts 539 successive next-syllable targets. There is one pass only; online learning uses 16-pair chunks (34 updates) while retaining recurrent state across chunks and words. Matching 540 syllables matches the nominal stimulus count in the two-minute infant familiarization, not biological learning rates or speech perception. Evaluation freezes weights and uses a new held-out word order. Black line: mean surprisal in bits, minus log base 2 of the probability assigned to the incoming syllable, across five independently trained models. Gray band: pointwise 95 percent bootstrap CI for the model mean from 10,000 resamples of whole model seeds, preserving paired time points. The band describes training variability, not infant variability. The displayed eight-word window follows four warm-up words and is fixed, not selected for performance. Dashed lines and word labels are explanatory overlays, never model inputs. A boundary-crossing error appears on the first syllable of the next word, not the last syllable of the preceding word. The full held-out stream averages 2.007 bits across boundaries and 0.719 bits within words. This is a possible segmentation cue, not proof of explicit word representations or the mechanism used by infants. The preceding slide summarizes the infant study, whose second experiment used a different inventory for word-versus-part-word testing. This simulation uses the first experiment inventory, not that exact second-experiment test. Transition to the next slide to unpack the recurrent network that can learn these sequential regularities. The subsequent Elman next-word example concerns his separate artificial-sentence experiment.
+
+## 21. Unroll the network through time
+
+Recurrent networks & temporal context · 30–32 min
 
 Reveal three time steps manually using the same authored architecture and node positions as the later Elman example. Every column is a moment, not a new layer with new weights. Inputs x1, x2 and x3 appear above hidden states h1, h2 and h3; prediction vectors appear below. The separate h0 node is the initial hidden state before x1, consistent with the Elman example. Each circle represents a vector, not one biological neuron. The hidden-to-hidden links carry the previous state; recurrent and prediction weights are reused at every time step. The Elman slide adds word labels and next-word targets to this identical diagram. Shared weights make variable-length sequences possible. This is an authored schematic of recurrence, not a reproduced source figure.
 
 Source: Christopher Olah (2015) · Understanding LSTM Networks
 
-## 21. Elman: predict the next word
+## 22. Elman: predict the next word
 
-Recurrent networks & temporal context · 31–33 min
+Recurrent networks & temporal context · 32–34 min
 
 Reuse the exact unrolled architecture, node positions, connections and x/h/ŷ notation introduced on the earlier unrolling slide. Connect the preceding infant example to the general question of learning sequence structure through prediction; this is a separate modeling example, not a reproduction of that infant experiment. Training compares next-word predictions with the following word and updates the shared weights. Initially show that familiar architecture. Build 1 adds boy, chases, dog above the input vectors; build 2 adds next-word targets under the output vectors; build 3 highlights the hidden-state row to introduce the forthcoming representation analysis. The illustration is not an assertion that these predictions are already correct. The third target is omitted with an ellipsis because the continuation is not specified. Each circle denotes an input, hidden-state or output vector, not one unit for an entire word. Elman’s original context units copy the previous hidden activities; the unrolled h-to-h links express the same memory dependency, with the copied state implicit. The schematic notation does not specify the activation function; Elman’s original model used sigmoid units. Elman’s 1990 paper has several demonstrations; focus on the simple-sentence word prediction experiment. Artificial sequences provided regularities without noun/verb category labels as targets. This is a cognitive modeling example, not a brain-recording experiment.
 
 Source: Elman (1990), Finding Structure in Time · Cognitive Science
 
-## 22. Structure appears in hidden states
+## 23. Structure appears in hidden states
 
-Recurrent networks & temporal context · 33–35 min
+Recurrent networks & temporal context · 34–36 min
 
 Published Figure 7, article p.200 (PDF p.22). This is a hierarchical clustering tree of words, not a network wiring diagram, brain anatomy, or clusters of individual hidden units. After training the simple recurrent next-word prediction model, freeze its weights and run the word stream through it. For every word occurrence, record the activations of the 150 hidden units after processing that word in context. Average those vectors separately for each of the 29 word types; then hierarchically cluster the 29 mean activation vectors. Leaves label the words that produced the vectors. Joins closer to the word labels indicate more similar average patterns; joins farther left merge more dissimilar clusters. Read mouse/cat and woman/girl as concrete examples. The unit order is the same in every vector. Noun and verb category annotations were not the next-word training targets. The original paper cautions that averaging can induce clustering artifacts; individual-token analyses are needed too. Figure is preserved, not a new clustering calculation.
 
 Source: Elman (1990), Finding Structure in Time · Cognitive Science
 
-## 23. Human recall favors nearby studied items
+## 24. Human recall favors nearby studied items
 
-Recurrent networks & temporal context · 35–36.5 min
+Recurrent networks & temporal context · 36–37.5 min
 
 Introduce the human free-recall finding before the temporal context model. Participants study a list and later recall its items without being required to preserve study order. One original curve is shown: Howard & Kahana Figure 1, panel E, reproduced from Kahana (1996). This curve collapses over conditions of Murdock & Okada (1970). The other five panels are omitted. Axis labels are repositioned for this single-panel excerpt; plotted points, connecting lines, ticks, and error bars are retained from the source. It is data motivating TCM, not a plotted fit from our demo. Lag zero is excluded. Original error bars are retained with their original meaning; do not relabel them as newly computed 95% CIs. Source caption identifies the conditions. After explaining the observed nearby-item advantage, transition with: how could a changing internal context produce this pattern? The next slide introduces the temporal context mechanism. The horizontal variable is signed study-list position lag, not elapsed time or the order of earlier recall responses. Recalling study item 5 then study item 6 gives lag +1; item 5 then item 4 gives lag −1. Positive lags move forward through the studied list. The vertical axis is conditional response probability among available transitions. Point out the forward asymmetry after explaining the axes.
 
 Source: Howard & Kahana (2002), Temporal Context Model · J. Mathematical Psychology
 
-## 24. Temporal context explains nearby recall
+## 25. Temporal context explains nearby recall
 
-Recurrent networks & temporal context · 36.5–39 min
+Recurrent networks & temporal context · 37.5–40 min
 
 Start from the human result on the preceding slide: why does recalling one item favor recall of its study-list neighbors? Howard and Kahana’s TCM: encoding and retrieval both change context; reinstated context helps cue neighboring list items. Teaching sketch shows apple, chair, river, lamp with overlapping contexts; it is not a full implementation or fitted recall simulation. Shared evolving-state idea links this to recurrence, but TCM has its own memory and retrieval mechanisms. Within a group, each bar position denotes a context component. Strength is encoded by darkness, not height; the bars have equal height. The same component positions are used across all four groups. Reveal the context vectors, explain their overlap for nearby studied items, then recall river and show its reinstated context cueing neighbors. Link the mechanism explicitly back to the human lag-CRP curve. This completes the four-minute data-to-model sequence. The simplified sketch explains the proximity intuition; it does not by itself derive the forward asymmetry or the numerical human curve. In the full model, retrieved context is an asymmetric retrieval cue, as explained in Howard and Kahana (2002).
 
@@ -211,15 +217,15 @@ Expected answer: Items studied near “river” share more of that context.
 
 Source: Howard & Kahana (2002), Temporal Context Model · J. Mathematical Psychology
 
-## 25. A gate is a learned amount
+## 26. A gate is a learned amount
 
-Gated recurrence · 39–40.5 min
+Gated recurrence · 40–41.5 min
 
 Use a circle and arrow for the gate computation. Move g between 0, 0.5 and 1: g×0.8 yields 0, 0.4, 0.8. Explain that this is a continuous learned amount, not a physical switch. The slider is a manual intervention, not gate training.
 
-## 26. Long short-term memory (LSTM)
+## 27. Long short-term memory (LSTM)
 
-Gated recurrence · 40.5–43 min
+Gated recurrence · 41.5–44 min
 
 Use Olah’s highlighted diagrams in order: cell update path, forget gate, input gate and candidate, cell update, output gate. Main-slide crops retain the complete cell diagram and omit the dense equations beside it. Yellow boxes are learned neural-network layers; pink circles are elementwise operations. Lines carry vectors; merging means concatenation and branching means copying. Explain these symbols as each becomes relevant. Olah uses uppercase C for cell state; the scalar demo uses lowercase c for the same quantity. Modern forget-gate LSTM, not the exact original 1997 cell. The original LSTM is Hochreiter & Schmidhuber (1997); forget gates were introduced later (Gers et al., 2000). c and h are vectors. Multiplication is elementwise. A hidden state is not a biological neural firing model.
 
@@ -229,15 +235,15 @@ Expected answer: Yes. The output gate controls how much of tanh(cell) is exposed
 
 Source: Christopher Olah (2015) · Diagram; Hochreiter & Schmidhuber (1997); Gers et al. (2000)
 
-## 27. Preserve a value, then replace it
+## 28. Preserve a value, then replace it
 
-Gated recurrence · 43–44.5 min
+Gated recurrence · 44–45.5 min
 
 Use controlled presets: retain (f=1,i=0,o=1), partial write (f=0.5,i=0.5), replace (f=0,i=1), hide output (f=1,i=0,o=0). Fixed previous c=0.8 and candidate=−0.6. Values 0 and 1 are idealized gate endpoints; finite sigmoid logits approach rather than reach them. This is an arithmetic illustration, not an LSTM trained on a delay task.
 
-## 28. Gated recurrent unit (GRU)
+## 29. Gated recurrent unit (GRU)
 
-Gated recurrence · 44.5–46 min
+Gated recurrence · 45.5–47 min
 
 Use Olah’s write convention: h=(1−z) h_prev+z candidate. z near 0 retains old state, and z near 1 writes the candidate. This complements the original Cho retention variable; do not mix the two conventions. The original diagram’s cell is shown intact, while its adjacent equations are reserved for the reference slide. Here candidate=tanh(x+0.8 r h_prev), x=−0.6, h_prev=0.8. Reset affects candidate computation; it does not directly erase the old-state route. The gates are manually controlled; actual GRUs learn their gate-producing weights. Keep the main numerical display focused on old state, candidate and their blended result. The candidate computation belongs in the separate formula reference. To test the question, set z=0, vary r, and observe h remains 0.8 while the candidate may change.
 
@@ -247,47 +253,47 @@ Expected answer: No. With writing at 0, the old state is retained regardless of 
 
 Source: Christopher Olah (2015) · Diagram; Cho et al. (2014)
 
-## 29. Same bird, different location
+## 30. Same bird, different location
 
-Convolutional networks · 46–46.5 min
+Convolutional networks · 47–47.5 min
 
 Introduce the convolution section with the robin photograph used earlier in the semantic-memory slides. Show exactly the same crop and size at three different positions: left, upper right, then lower center. Each manual advance moves the photo; previous reverses the move. Leave only one instance visible so students compare position without a second changing property. Students can still recognize the bird at these different locations. Use this visual intuition to motivate recognizing a local pattern wherever it occurs; the next slide simplifies that problem to a moving vertical stripe. The photo includes its original background, so this is a translated photograph, not a bird segmented onto novel scenes. It illustrates robust recognition, not measured neural invariance or a claim that all CNNs are perfectly translation invariant. Source photograph is from the supplied lecture, as recorded in semantic-user-provenance.json.
 
-## 30. A visual pattern can move
+## 31. A visual pattern can move
 
-Convolutional networks · 46.5–48 min
+Convolutional networks · 47.5–49 min
 
 Compare two binary images with a shifted vertical stripe. Avoid claiming complete translation invariance: convolution is approximately translation equivariant away from boundary effects, and classifier robustness depends on architecture/training.
 
-## 31. One patch produces one number
+## 32. One patch produces one number
 
-Convolutional networks · 48–51 min
+Convolutional networks · 49–52 min
 
 Start with the 5×5 binary image and its highlighted 3×3 window. Build 1 extracts the patch, places it beside the fixed filter, and shows all nine cellwise products. The blue box identifies the corresponding entry in all three grids; use Next cell or click a cell to trace its contribution. Build 2 adds those nine products into one output. Change the patch to encounter a positive response, zero response and negative response. Input intensity is grayscale; blue and orange indicate signed numerical contributions. The filter is hand specified, stride 1, no padding, no bias. This implements the cross-correlation convention used by CNN libraries. The brief outline movement is lecturer-triggered and respects reduced-motion settings.
 
-## 32. Build a feature map one position at a time
+## 33. Build a feature map one position at a time
 
-Convolutional networks · 51–54 min
+Convolutional networks · 52–55 min
 
 The filter weights stay fixed. At build 1 the first output is revealed. Next position slides the 3×3 window by one pixel and fills exactly one corresponding cell; previously filled cells remain visible. Previous position reverses this sequence. Reveal map fills all nine positions at once if needed. Restart clears the progress back to the first position. Build 2 adds ReLU beside the raw map so negative responses visibly become zero. Changing or shifting the input resets the scan. For the original vertical stripe, each raw row is [3,0,−3] and each ReLU row is [3,0,0]. After shifting right, raw rows are [0,3,0]. After the next shift the stripe reaches the right edge; repeated shifts may remove it. Blank output cells have not yet been visited. The source image, active window and highlighted output remain linked.
 
-## 33. Two filters, two different feature maps
+## 34. Two filters, two different feature maps
 
-Convolutional networks · 54–56 min
+Convolutional networks · 55–57 min
 
 Use the same input image for the vertical and horizontal filters. Reveal the vertical branch at build 1 and horizontal branch at build 2. Each filter has one separately labeled raw response map; no ReLU is applied on this comparison slide. A vertical stripe produces rows [3,0,−3] for the vertical filter and zeros for the horizontal filter. A horizontal stripe reverses their roles: the horizontal map has rows [3,3,3], [0,0,0], [−3,−3,−3]. Use the Vertical, Horizontal and Corner presets, or edit individual input pixels by clicking the grayscale image. Every edit recomputes both maps. These filters detect the shown polarity of an edge; a sign reversal gives a negative response. Training would normally learn the filter values. This is an exact teaching demonstration, not a trained vision model.
 
-## 34. AlexNet: a convolutional neural network
+## 35. AlexNet: a convolutional neural network
 
-Convolutional networks · 56–58 min
+Convolutional networks · 57–59 min
 
 Redrawn from the instructor-provided architecture diagram in Ignacio Quintero’s AlexNet blog post: https://medium.com/@igquinteroch/understanding-alexnet-the-2012-breakthrough-that-redefined-ai-d0e267e2470a . Build 0: RGB input. Build 1: five convolutional feature-map volumes and pooling after Conv1 and Conv2. Build 2: pooling after Conv5 and the three fully connected layers. Build 3: the ImageNet result. Dimensions are height × width × channels; FC numbers count units. Volumes depict stacks of spatial feature maps, not individual neurons, and their drawn proportions are schematic. The 227-pixel input convention follows the supplied diagram; with an unpadded 11×11 stride-4 first convolution it produces 55×55 maps. The original paper reports 224-pixel crops; implementations differ in input/padding conventions. Max pooling reduces 55→27, 27→13 and 13→6; final pooled representation is 6×6×256. ReLU, normalization, dropout and two-GPU grouping are omitted from the overview. Source: Krizhevsky, Sutskever & Hinton (2012), ImageNet Classification with Deep Convolutional Neural Networks, https://www.cs.toronto.edu/~hinton/absps/imagenet.pdf . Five convolutional plus three fully connected learned layers. The winning 2012 entry was an ensemble of AlexNet-family networks, not one network in isolation; its top-5 test error was 15.3%. Top-5 error means the correct class is absent from the five highest-ranked predictions. The result helped establish large trained CNNs as a practical approach to image recognition.
 
 Source: Krizhevsky, Sutskever & Hinton (2012) · ImageNet classification with deep CNNs
 
-## 35. Compare a visual model with cortex
+## 36. Compare a visual model with cortex
 
-Convolutional networks · 58–59.5 min
+Convolutional networks · 59–60.5 min
 
 Yamins et al. compared hierarchical convolutional models with macaque IT responses; also studied V4. Freeze the task model for the neural comparison, fit a separate linear readout, and test on novel images. Readout fitting uses neural training data even though task optimization need not. Two distinct goals: recognize objects versus predict neural responses. The anatomical human-brain image is a generic symbol for the neural-recording branch, not measured activation data or a localization map. Image: NIAID Visual & Medical Arts, Ryan Kissinger (2024), Brain Lateral, NIH BioArt BIOART-000060, public domain, courtesy of NIAID; https://bioart.niaid.nih.gov/bioart/60. The Yamins visual study used macaque recordings despite this generic human-brain icon. Follow two branches from the same image: model → representations → predicted responses, and participant brain → recorded responses. Predictions and recordings meet at Compare; neither branch generates the other. Fitting uses training images and evaluation uses different images.
 
@@ -297,95 +303,95 @@ Expected answer: To test generalization instead of measuring how well it fits th
 
 Source: Yamins et al. (2014) · PNAS · doi:10.1073/pnas.1403112111
 
-## 36. Task performance and IT predictivity
+## 37. Task performance and IT predictivity
 
-Convolutional networks · 59.5–62 min
+Convolutional networks · 60.5–63 min
 
 Published Figure 1A–B, p.8620. The figure fills the slide; there is no right-hand explanatory text. Explain aloud: right means better categorization, up means more IT response variance explained, and each point is a different model. Focus first on A; B extends the comparison to other models. x=balanced categorization accuracy, chance0.5; y=median explained variance across168 IT sites. Green=random selection; blue=categorization optimization; orange=IT fitting optimization. In B, red squares trace HMO optimization, black circles are controls/published models, and light-blue circles repeat task-optimized models. The purple category ideal observer is not an image-computable model. Reveal axes, then discuss trend. Preserve all original color coding and annotations. No newly calculated uncertainty. This result concerns tested hierarchical model families.
 
 Source: Yamins et al. (2014) · PNAS · doi:10.1073/pnas.1403112111
 
-## 37. What the visual-cortex result supports
+## 38. What the visual-cortex result supports
 
-Convolutional networks · 62–63.5 min
+Convolutional networks · 63–64.5 min
 
 The bounded statement matters: not a theorem that any optimization, task or architecture always increases brain predictivity. Distinguish correspondence after a fitted readout from a neuron-to-unit identity. Note intermediate model layers were useful for V4, without adding another dense figure.
 
 Source: Yamins et al. (2014) · PNAS · doi:10.1073/pnas.1403112111
 
-## 38. Transformers: represent a word using its context
+## 39. Transformers: represent a word using its context
 
-Transformers & attention · 63.5–66 min
+Transformers & attention · 64.5–67 min
 
 Introduce full bidirectional self-attention using a selected middle word, cat, so context visibly arrives from both its left and its right. Build 0 shows the words. Build 1 reveals the starting vector strips. Build 2 shows context flowing directly from The, saw and it into cat and an illustrative changed cat representation. Build 3 shows updated representations at all positions: these can be computed in parallel within a layer when the input sequence is available. Only paths into the selected word are drawn, to keep the figure readable. These are schematic representations, not model activations or evidence about a grammatical dependency. BERT-style encoders use full bidirectional self-attention. GPT-style next-token decoders use causal attention, accessing the current and earlier positions; do not call all transformers bidirectional. The original Transformer has a bidirectional encoder and a causally masked decoder. Bidirectional RNNs also exist: bidirectionality alone is not the distinguishing advantage. Attention directly mixes representations across positions without carrying context through a succession of recurrent states, and transformer layers can process the supplied positions in parallel. Autoregressive generation still emits tokens sequentially. Word-like tokens are used for readability; real models often use subwords. Position information remains important, though omitted from this overview; implementations differ, with learned position embeddings in GPT-2. Vector components have learned roles rather than hand-assigned meanings. Sources: Vaswani et al. (2017), https://arxiv.org/abs/1706.03762 ; Devlin et al. (2019), https://aclanthology.org/N19-1423/ .
 
 Source: Vaswani et al. (2017); Devlin et al. (2019)
 
-## 39. Attention weights control the information flow
+## 40. Attention weights control the information flow
 
-Transformers & attention · 66–68.5 min
+Transformers & attention · 67–69.5 min
 
 This is a full bidirectional attention example. Start with cat, a middle word, as the selected destination so its update visibly uses The on its left and saw and it on its right. Changing the dropdown recomputes all four attention weights; no positions are hidden. Build 0 shows words. Build 1 adds attention bars and rounded percentages. Build 2 adds one info circle per word and paths into an addition node. An info circle denotes the information a token can contribute, formally its value vector, without claiming particular vector dimensions or component magnitudes. Path width encodes attention weight, not value-vector magnitude or causal impact on the final prediction, with a minimum visible stroke. Build 3 reveals the mixed information for the selected word. This is one head’s output before the multi-head output projection and residual addition, not a predicted word. The projections and weights are hand specified, not trained language-model results; they establish no grammatical or coreference interpretation. Verification for cat: q=[1,0], keys=[[0,0],[2,0],[0,1],[1,0]], values=[[0,0],[1,0],[0,1],[0.5,0.5]]. Divide query–key dot products by sqrt(2), giving [0,1.414213562,0,0.707106781]. Softmax gives [0.122829520,0.505228570,0.122829520,0.249112390]. Weighted value contributions are [0,0], [0.505228570,0], [0,0.122829520], [0.124556195,0.124556195], with output [0.629784765,0.247385715]. Values round independently for display. For The, full attention yields four weights of 0.25 and output [0.375,0.375]. For it, use a distinct query [0.5,1.5]: scores [0,0.707106781,1.060660172,0.353553391], weights [0.136230296,0.276290704,0.393470846,0.194008155], and output [0.373294781,0.490474923]. Cat therefore displays approximately [12%,51%,12%,25%], while it displays [14%,28%,39%,19%]. These different hand-set queries illustrate how changing the destination word changes the information mixture; they are not claims about grammatical relations. This full-context example is distinct from the GPT-2 next-token model in the later class demo. Source: Vaswani et al. (2017), section 3.2.1, https://arxiv.org/abs/1706.03762 .
 
-## 40. Several heads, several learned mixtures
+## 41. Several heads, several learned mixtures
 
-Transformers & attention · 68.5–69 min
+Transformers & attention · 69.5–70 min
 
 Two teaching mixtures over the same tokens illustrate distinct weights, not measured GPT head behavior. Do not label one head syntax and another semantics as an empirical fact. Attention weights alone are not a causal explanation of model behavior. The selected query is the token “it”; this example uses all four context tokens, consistent with the full-attention introduction. Each bar is an attention weight for the token directly above it; each head’s weights sum to 1. Blue and orange distinguish heads consistently. The final build shows one output vector for each head, joins those outputs, and applies a learned output projection to produce one attention update. The vector-strip components are schematic and are not computed from the displayed weight rows; each real head also has its own value projection. The output projection can mix and rescale components; it is not simply an average of the head outputs. Both heads attend to the same available tokens but use different learned projections. The two colored rows are separate heads, not different time steps.
 
-## 41. Attention is one part of a block
+## 42. Attention is one part of a block
 
-Transformers & attention · 69–71 min
+Transformers & attention · 70–72 min
 
 Replace the former unit-like Attn and MLP circles with rectangular processing modules. Show H as a group of four token-vector strips, with the same positions at the input and output. Arrows in this diagram carry the whole sequence of representations, not a single scalar. Build attention first, then a bank of four independent MLP applications, then residual paths and the output to the next block. The four small MLP boxes depict applications of the same feedforward parameters at different positions; they are not four independently trained MLPs. Residual plus circles are elementwise vector additions across the sequence. Both attention and feedforward updates are added to the representation entering their own sublayer. Explain feedforward parameters are shared across positions but no token mixing occurs inside that sublayer. This diagram shows the shared attention, token-wise feedforward and residual structure. The context example uses full attention. Normalization placement differs across architectures; the separate GPT-2 formula reference specifies its pre-normalization order. Repeat blocks to form depth; finish with a vocabulary prediction head. Optional equations make the order precise. Keep normalization in presenter notes: layer normalization rescales components within each token representation and has learned scale and offset parameters. It is omitted from the visible simplified diagram. Focus the main explanation on the residual addition that is actually shown.
 
 Source: Vaswani et al. (2017); Radford et al. (2019)
 
-## 42. Transformer demos
+## 43. Transformer demos
 
-Transformers & attention · 71–77 min
+Transformers & attention · 72–78 min
 
 Use Transformer Explainer as the main live class demo: https://poloclub.github.io/transformer-explainer/ . The preview is an unaltered screenshot of its preset example captured on October 14, 2026, while the local GPT-2 download was pending; it is not a claim that custom inference was tested. Open the site ahead of class and allow its model download to finish. Start from its preset sentence, inspect one query row and change the selected head; then connect attention output to the token-wise MLP and next-token probabilities. GPT-2 small is a causal decoder-only model. Use the 3Blue1Brown video, Attention in transformers, step-by-step (Deep Learning Chapter 6), https://www.youtube.com/watch?v=eMlx5fFNoYc , for the geometric intuition. Optional BertViz, https://github.com/jessevig/bertviz , allows attention-head inspection. Its BERT examples match the bidirectional attention walkthrough. The featured Transformer Explainer instead uses GPT-2, which accesses current and earlier words when predicting the next token. State this difference briefly before opening that tool. Bidirectional attention is one configuration of the shared mechanism, not a property of every transformer. BertViz: Vig (2019), https://aclanthology.org/P19-3007/ . Attention weights alone do not establish a causal account of the model prediction. All three links are clickable in the HTML and printable PDF. Six minutes are reserved for the live demonstration within the 90-minute lecture. Screenshot courtesy of the Georgia Tech Polo Club Transformer Explainer team; the tool is linked directly rather than embedded so the slide does not depend on a network connection to load.
 
 Source: Transformer Explainer · Georgia Tech Polo Club
 
-## 43. Compare language models with brain responses
+## 44. Compare language models with brain responses
 
-Transformers & attention · 77–78.5 min
+Transformers & attention · 78–79.5 min
 
 Schrimpf et al. benchmarked43 language models against two fMRI datasets and one ECoG dataset; also reading times. Sentence/word aggregation and fitting differ by dataset. This diagram teaches the shared comparison logic, not a claim all stimuli were identical across studies. Neural readout fitting is distinct from language-model pretraining. The anatomical human-brain image is a generic symbol for the neural-recording branch, not measured activation data or a localization map. Image: NIAID Visual & Medical Arts, Ryan Kissinger (2024), Brain Lateral, NIH BioArt BIOART-000060, public domain, courtesy of NIAID; https://bioart.niaid.nih.gov/bioart/60. Use separate model and participant branches. Compare is where predicted responses meet recorded responses. The model does not produce or cause the participant recording. Fit the readout on training stimuli and evaluate it on held-out stimuli.
 
 Source: Schrimpf et al. (2021) · PNAS · doi:10.1073/pnas.2105646118
 
-## 44. Next-word performance and brain predictivity
+## 45. Next-word performance and brain predictivity
 
-Transformers & attention · 78.5–81 min
+Transformers & attention · 79.5–82 min
 
 Published Figure3A, article p.5. The x-axis decreases left→right; make this explicit before discussing trend. y is normalized neural predictivity aggregated across three datasets. r=0.44 in the plotted aggregate. The inset separates datasets: ECoG association positive but not significant. Preserve all points and inset. The paper identifies error bars as median absolute deviation over subject scores (Fig.2 caption: here and elsewhere), not95% CIs; do not relabel them. Normalization by a noise ceiling does not mean all raw neural variance is explained. Explain perplexity as the model’s average uncertainty about the next word: a lower score means it assigns more probability to the words that actually follow. It is not classification accuracy. The plotted neural scores are normalized relative to an estimated noise ceiling and aggregated across datasets; keep that technical detail in narration rather than adding another visual definition.
 
 Source: Schrimpf et al. (2021) · PNAS · doi:10.1073/pnas.2105646118
 
-## 45. A predictive model is a testable hypothesis
+## 46. A predictive model is a testable hypothesis
 
-Transformers & attention · 81–82 min
+Transformers & attention · 82–83 min
 
 Some untrained models also had substantial neural predictivity after fitting a readout. This limits a training-only explanation. Treat the work as evidence about candidate representational computations, not direct identification of the brain algorithm or a claim of biological self-attention.
 
 Source: Schrimpf et al. (2021) · PNAS · doi:10.1073/pnas.2105646118
 
-## 46. Choose the information flow
+## 47. Choose the information flow
 
-Consolidation · 82–83 min
+Consolidation · 83–84 min
 
 Build the comparison rows. Architecture is often combined in practice; the rows describe characteristic operations, not exclusive application domains. Every family learns parameters and needs generalization checks. Ask students to describe the information each operation makes available.
 
-## 47. Neural networks as model organisms
+## 48. Neural networks as model organisms
 
-Consolidation · 83–85 min
+Consolidation · 84–86 min
 
 Close the lecture with the two-way exchange between AI and neuroscience. The minute freed by removing the separate closing-question slide is reserved for explaining this figure. Start with an explicit multilayer neural network and the anatomical human brain. Build 1 reveals the blue network-to-brain arrow: Test brain hypotheses. Neural networks are tractable computational test beds: vary architecture, learning objectives or experience; inspect internal representations; perturb units or connections; compare behavioral and neural predictions with independent biological evidence. The phrase model organism is an analogy to experimental systems, not a claim that an artificial network is a biological organism or an exact copy of the brain. Build 2 adds the orange brain-to-network arrow: Inspire better AI. Computational principles learned from neuroscience can suggest architectures, learning rules and memory mechanisms; whether these improve AI must be tested. The two directions describe scientific exchange, not physical causation between the depicted objects. The network drawing is schematic, not a trained model or measured activity. Keep the on-slide wording to the title, two object labels and two arrow captions; narrate the details. References: Richards et al. (2019), A deep learning framework for neuroscience, Nature Neuroscience 22:1761–1770, https://doi.org/10.1038/s41593-019-0520-2 ; Hassabis, Kumaran, Summerfield & Botvinick (2017), Neuroscience-Inspired Artificial Intelligence, Neuron 95:245–258, https://doi.org/10.1016/j.neuron.2017.06.011 . Brain image: NIAID Visual & Medical Arts, Ryan Kissinger (2024), Brain Lateral, NIH BioArt BIOART-000060, public domain, courtesy of NIAID; https://bioart.niaid.nih.gov/bioart/60.
 
-## 48. References
+## 49. References
 
 Optional reference · optional
 
