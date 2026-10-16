@@ -39,7 +39,7 @@ The semantic matrix, TCM overlap sketch and two-head weights are teaching illust
 
 Recap · 0–0.5 min
 
-Open with the title only. Today we ask what changes when we change the connections between familiar artificial neurons.
+Open with the title and presenter name, Qihong Lu. Today we ask what changes when we change the connections between familiar artificial neurons.
 
 ## 2. The same ingredients
 
