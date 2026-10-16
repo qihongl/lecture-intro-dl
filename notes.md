@@ -173,7 +173,7 @@ Recurrent networks & temporal context · 29–31 min
 
 Reveal three time steps manually using the same authored architecture and node positions as the later Elman example. Every column is a moment, not a new layer with new weights. Inputs x1, x2 and x3 appear above hidden states h1, h2 and h3; prediction vectors appear below. The separate h0 node is the initial hidden state before x1, consistent with the Elman example. Each circle represents a vector, not one biological neuron. The hidden-to-hidden links carry the previous state; recurrent and prediction weights are reused at every time step. The next Elman slide adds Saffran syllable labels and next-syllable targets to this identical diagram. Shared weights make variable-length sequences possible. This is an authored schematic of recurrence, not a reproduced source figure.
 
-Source: Christopher Olah (2015) · Understanding LSTM Networks
+Source: Elman (1990) · architecture; Saffran, Aslin & Newport (1996) · syllables
 
 ## 21. Elman network: predict the next syllable
 
