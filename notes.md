@@ -1,6 +1,6 @@
 # Deep learning architectures
 
-86 minutes including manually controlled demonstrations and discussion. 48 teaching slides; 1 optional reference slides. Formula reference pages are in a separate document.
+88 minutes including manually controlled demonstrations and discussion. 50 teaching slides; 1 optional reference slides. Formula reference pages are in a separate document.
 
 ## Presenter controls
 
@@ -14,10 +14,10 @@ Arrow keys / Space advance one build; left arrow reverses a build. R resets the 
 | Multilayer networks | 5–24.5 | 4–16 |
 | Recurrent networks & temporal context | 24.5–40 | 17–25 |
 | Gated recurrence | 40–47 | 26–29 |
-| Convolutional networks | 47–64.5 | 30–38 |
-| Transformers & attention | 64.5–83 | 39–46 |
-| Consolidation | 83–86 | 47–48 |
-| Optional reference | Outside the 86 min | 49–49 |
+| Convolutional networks | 47–66.5 | 30–40 |
+| Transformers & attention | 66.5–85 | 41–48 |
+| Consolidation | 85–88 | 49–50 |
+| Optional reference | Outside the 88 min | 51–51 |
 
 ## Demonstration solutions
 
@@ -291,9 +291,25 @@ Redrawn from the instructor-provided architecture diagram in Ignacio Quintero’
 
 Source: Krizhevsky, Sutskever & Hinton (2012) · ImageNet classification with deep CNNs
 
-## 36. Compare a visual model with cortex
+## 36. AlexNet: learned Conv1 filters
 
-Convolutional networks · 59–60.5 min
+Convolutional networks · 59–60 min
+
+Original Figure 3 from Krizhevsky, Sutskever and Hinton (2012). Highlight Conv1 in the same compact architecture diagram used on the following slide. The montage contains all 96 learned first-layer convolutional kernels, each 11 × 11 × 3. These are trained weights, not responses to an input or biological recordings. The figure is reproduced without changing the filter ordering or colors. Published qualitative example; no estimated population quantity or confidence interval is involved.
+
+Source: Krizhevsky, Sutskever & Hinton (2012) · Fig. 3
+
+## 37. AlexNet: FC7 representations
+
+Convolutional networks · 60–61 min
+
+Original Figure 4, right, from Krizhevsky, Sutskever and Hinton (2012), cropped to the elephant and dog rows (zero-based rows 1 and 4). Keep the architecture identical to the previous slide and highlight FC7. Each blue-framed image is an ILSVRC-2010 test image; its six neighbors are training images ranked by Euclidean distance in the last 4096-dimensional hidden-layer activity, FC7. The original images and neighbor rank order are preserved. This is image-induced activity-based similarity, not visualizations of individual weights, individual unit preferences, or synthetic images. FC7 is fully connected. Use these qualitative examples to discuss more abstract visual similarity while avoiding the claim that one unit encodes a named category. No estimated population quantity or confidence interval is involved.
+
+Source: Krizhevsky, Sutskever & Hinton (2012) · Fig. 4, right (cropped)
+
+## 38. Compare a visual model with cortex
+
+Convolutional networks · 61–62.5 min
 
 Yamins et al. compared hierarchical convolutional models with macaque IT responses; also studied V4. Freeze the task model for the neural comparison, fit a separate linear readout, and test on novel images. Readout fitting uses neural training data even though task optimization need not. Two distinct goals: recognize objects versus predict neural responses. The anatomical human-brain image is a generic symbol for the neural-recording branch, not measured activation data or a localization map. Image: NIAID Visual & Medical Arts, Ryan Kissinger (2024), Brain Lateral, NIH BioArt BIOART-000060, public domain, courtesy of NIAID; https://bioart.niaid.nih.gov/bioart/60. The Yamins visual study used macaque recordings despite this generic human-brain icon. Follow two branches from the same image: model → representations → predicted responses, and participant brain → recorded responses. Predictions and recordings meet at Compare; neither branch generates the other. Fitting uses training images and evaluation uses different images.
 
@@ -303,95 +319,95 @@ Expected answer: To test generalization instead of measuring how well it fits th
 
 Source: Yamins et al. (2014) · PNAS · doi:10.1073/pnas.1403112111
 
-## 37. Task performance and IT predictivity
+## 39. Task performance and IT predictivity
 
-Convolutional networks · 60.5–63 min
+Convolutional networks · 62.5–65 min
 
 Published Figure 1A–B, p.8620. The figure fills the slide; there is no right-hand explanatory text. Explain aloud: right means better categorization, up means more IT response variance explained, and each point is a different model. Focus first on A; B extends the comparison to other models. x=balanced categorization accuracy, chance0.5; y=median explained variance across168 IT sites. Green=random selection; blue=categorization optimization; orange=IT fitting optimization. In B, red squares trace HMO optimization, black circles are controls/published models, and light-blue circles repeat task-optimized models. The purple category ideal observer is not an image-computable model. Reveal axes, then discuss trend. Preserve all original color coding and annotations. No newly calculated uncertainty. This result concerns tested hierarchical model families.
 
 Source: Yamins et al. (2014) · PNAS · doi:10.1073/pnas.1403112111
 
-## 38. What the visual-cortex result supports
+## 40. What the visual-cortex result supports
 
-Convolutional networks · 63–64.5 min
+Convolutional networks · 65–66.5 min
 
 The bounded statement matters: not a theorem that any optimization, task or architecture always increases brain predictivity. Distinguish correspondence after a fitted readout from a neuron-to-unit identity. Note intermediate model layers were useful for V4, without adding another dense figure.
 
 Source: Yamins et al. (2014) · PNAS · doi:10.1073/pnas.1403112111
 
-## 39. Transformers: represent a word using its context
+## 41. Transformers: represent a word using its context
 
-Transformers & attention · 64.5–67 min
+Transformers & attention · 66.5–69 min
 
 Introduce full bidirectional self-attention using a selected middle word, cat, so context visibly arrives from both its left and its right. Build 0 shows the words. Build 1 reveals the starting vector strips. Build 2 shows context flowing directly from The, saw and it into cat and an illustrative changed cat representation. Build 3 shows updated representations at all positions: these can be computed in parallel within a layer when the input sequence is available. Only paths into the selected word are drawn, to keep the figure readable. These are schematic representations, not model activations or evidence about a grammatical dependency. BERT-style encoders use full bidirectional self-attention. GPT-style next-token decoders use causal attention, accessing the current and earlier positions; do not call all transformers bidirectional. The original Transformer has a bidirectional encoder and a causally masked decoder. Bidirectional RNNs also exist: bidirectionality alone is not the distinguishing advantage. Attention directly mixes representations across positions without carrying context through a succession of recurrent states, and transformer layers can process the supplied positions in parallel. Autoregressive generation still emits tokens sequentially. Word-like tokens are used for readability; real models often use subwords. Position information remains important, though omitted from this overview; implementations differ, with learned position embeddings in GPT-2. Vector components have learned roles rather than hand-assigned meanings. Sources: Vaswani et al. (2017), https://arxiv.org/abs/1706.03762 ; Devlin et al. (2019), https://aclanthology.org/N19-1423/ .
 
 Source: Vaswani et al. (2017); Devlin et al. (2019)
 
-## 40. Attention weights control the information flow
+## 42. Attention weights control the information flow
 
-Transformers & attention · 67–69.5 min
+Transformers & attention · 69–71.5 min
 
 This is a full bidirectional attention example. Start with cat, a middle word, as the selected destination so its update visibly uses The on its left and saw and it on its right. Changing the dropdown recomputes all four attention weights; no positions are hidden. Build 0 shows words. Build 1 adds attention bars and rounded percentages. Build 2 adds one info circle per word and paths into an addition node. An info circle denotes the information a token can contribute, formally its value vector, without claiming particular vector dimensions or component magnitudes. Path width encodes attention weight, not value-vector magnitude or causal impact on the final prediction, with a minimum visible stroke. Build 3 reveals the mixed information for the selected word. This is one head’s output before the multi-head output projection and residual addition, not a predicted word. The projections and weights are hand specified, not trained language-model results; they establish no grammatical or coreference interpretation. Verification for cat: q=[1,0], keys=[[0,0],[2,0],[0,1],[1,0]], values=[[0,0],[1,0],[0,1],[0.5,0.5]]. Divide query–key dot products by sqrt(2), giving [0,1.414213562,0,0.707106781]. Softmax gives [0.122829520,0.505228570,0.122829520,0.249112390]. Weighted value contributions are [0,0], [0.505228570,0], [0,0.122829520], [0.124556195,0.124556195], with output [0.629784765,0.247385715]. Values round independently for display. For The, full attention yields four weights of 0.25 and output [0.375,0.375]. For it, use a distinct query [0.5,1.5]: scores [0,0.707106781,1.060660172,0.353553391], weights [0.136230296,0.276290704,0.393470846,0.194008155], and output [0.373294781,0.490474923]. Cat therefore displays approximately [12%,51%,12%,25%], while it displays [14%,28%,39%,19%]. These different hand-set queries illustrate how changing the destination word changes the information mixture; they are not claims about grammatical relations. This full-context example is distinct from the GPT-2 next-token model in the later class demo. Source: Vaswani et al. (2017), section 3.2.1, https://arxiv.org/abs/1706.03762 .
 
-## 41. Several heads, several learned mixtures
+## 43. Several heads, several learned mixtures
 
-Transformers & attention · 69.5–70 min
+Transformers & attention · 71.5–72 min
 
 Two teaching mixtures over the same tokens illustrate distinct weights, not measured GPT head behavior. Do not label one head syntax and another semantics as an empirical fact. Attention weights alone are not a causal explanation of model behavior. The selected query is the token “it”; this example uses all four context tokens, consistent with the full-attention introduction. Each bar is an attention weight for the token directly above it; each head’s weights sum to 1. Blue and orange distinguish heads consistently. The final build shows one output vector for each head, joins those outputs, and applies a learned output projection to produce one attention update. The vector-strip components are schematic and are not computed from the displayed weight rows; each real head also has its own value projection. The output projection can mix and rescale components; it is not simply an average of the head outputs. Both heads attend to the same available tokens but use different learned projections. The two colored rows are separate heads, not different time steps.
 
-## 42. Attention is one part of a block
+## 44. Attention is one part of a block
 
-Transformers & attention · 70–72 min
+Transformers & attention · 72–74 min
 
 Replace the former unit-like Attn and MLP circles with rectangular processing modules. Show H as a group of four token-vector strips, with the same positions at the input and output. Arrows in this diagram carry the whole sequence of representations, not a single scalar. Build attention first, then a bank of four independent MLP applications, then residual paths and the output to the next block. The four small MLP boxes depict applications of the same feedforward parameters at different positions; they are not four independently trained MLPs. Residual plus circles are elementwise vector additions across the sequence. Both attention and feedforward updates are added to the representation entering their own sublayer. Explain feedforward parameters are shared across positions but no token mixing occurs inside that sublayer. This diagram shows the shared attention, token-wise feedforward and residual structure. The context example uses full attention. Normalization placement differs across architectures; the separate GPT-2 formula reference specifies its pre-normalization order. Repeat blocks to form depth; finish with a vocabulary prediction head. Optional equations make the order precise. Keep normalization in presenter notes: layer normalization rescales components within each token representation and has learned scale and offset parameters. It is omitted from the visible simplified diagram. Focus the main explanation on the residual addition that is actually shown.
 
 Source: Vaswani et al. (2017); Radford et al. (2019)
 
-## 43. Transformer demos
+## 45. Transformer demos
 
-Transformers & attention · 72–78 min
+Transformers & attention · 74–80 min
 
 Use Transformer Explainer as the main live class demo: https://poloclub.github.io/transformer-explainer/ . The preview is an unaltered screenshot of its preset example captured on October 14, 2026, while the local GPT-2 download was pending; it is not a claim that custom inference was tested. Open the site ahead of class and allow its model download to finish. Start from its preset sentence, inspect one query row and change the selected head; then connect attention output to the token-wise MLP and next-token probabilities. GPT-2 small is a causal decoder-only model. Use the 3Blue1Brown video, Attention in transformers, step-by-step (Deep Learning Chapter 6), https://www.youtube.com/watch?v=eMlx5fFNoYc , for the geometric intuition. Optional BertViz, https://github.com/jessevig/bertviz , allows attention-head inspection. Its BERT examples match the bidirectional attention walkthrough. The featured Transformer Explainer instead uses GPT-2, which accesses current and earlier words when predicting the next token. State this difference briefly before opening that tool. Bidirectional attention is one configuration of the shared mechanism, not a property of every transformer. BertViz: Vig (2019), https://aclanthology.org/P19-3007/ . Attention weights alone do not establish a causal account of the model prediction. All three links are clickable in the HTML and printable PDF. Six minutes are reserved for the live demonstration within the 90-minute lecture. Screenshot courtesy of the Georgia Tech Polo Club Transformer Explainer team; the tool is linked directly rather than embedded so the slide does not depend on a network connection to load.
 
 Source: Transformer Explainer · Georgia Tech Polo Club
 
-## 44. Compare language models with brain responses
+## 46. Compare language models with brain responses
 
-Transformers & attention · 78–79.5 min
+Transformers & attention · 80–81.5 min
 
 Schrimpf et al. benchmarked43 language models against two fMRI datasets and one ECoG dataset; also reading times. Sentence/word aggregation and fitting differ by dataset. This diagram teaches the shared comparison logic, not a claim all stimuli were identical across studies. Neural readout fitting is distinct from language-model pretraining. The anatomical human-brain image is a generic symbol for the neural-recording branch, not measured activation data or a localization map. Image: NIAID Visual & Medical Arts, Ryan Kissinger (2024), Brain Lateral, NIH BioArt BIOART-000060, public domain, courtesy of NIAID; https://bioart.niaid.nih.gov/bioart/60. Use separate model and participant branches. Compare is where predicted responses meet recorded responses. The model does not produce or cause the participant recording. Fit the readout on training stimuli and evaluate it on held-out stimuli.
 
 Source: Schrimpf et al. (2021) · PNAS · doi:10.1073/pnas.2105646118
 
-## 45. Next-word performance and brain predictivity
+## 47. Next-word performance and brain predictivity
 
-Transformers & attention · 79.5–82 min
+Transformers & attention · 81.5–84 min
 
 Published Figure3A, article p.5. The x-axis decreases left→right; make this explicit before discussing trend. y is normalized neural predictivity aggregated across three datasets. r=0.44 in the plotted aggregate. The inset separates datasets: ECoG association positive but not significant. Preserve all points and inset. The paper identifies error bars as median absolute deviation over subject scores (Fig.2 caption: here and elsewhere), not95% CIs; do not relabel them. Normalization by a noise ceiling does not mean all raw neural variance is explained. Explain perplexity as the model’s average uncertainty about the next word: a lower score means it assigns more probability to the words that actually follow. It is not classification accuracy. The plotted neural scores are normalized relative to an estimated noise ceiling and aggregated across datasets; keep that technical detail in narration rather than adding another visual definition.
 
 Source: Schrimpf et al. (2021) · PNAS · doi:10.1073/pnas.2105646118
 
-## 46. A predictive model is a testable hypothesis
+## 48. A predictive model is a testable hypothesis
 
-Transformers & attention · 82–83 min
+Transformers & attention · 84–85 min
 
 Some untrained models also had substantial neural predictivity after fitting a readout. This limits a training-only explanation. Treat the work as evidence about candidate representational computations, not direct identification of the brain algorithm or a claim of biological self-attention.
 
 Source: Schrimpf et al. (2021) · PNAS · doi:10.1073/pnas.2105646118
 
-## 47. Choose the information flow
+## 49. Choose the information flow
 
-Consolidation · 83–84 min
+Consolidation · 85–86 min
 
 Build the comparison rows. Architecture is often combined in practice; the rows describe characteristic operations, not exclusive application domains. Every family learns parameters and needs generalization checks. Ask students to describe the information each operation makes available.
 
-## 48. Neural networks as model organisms
+## 50. Neural networks as model organisms
 
-Consolidation · 84–86 min
+Consolidation · 86–88 min
 
 Close the lecture with the two-way exchange between AI and neuroscience. The minute freed by removing the separate closing-question slide is reserved for explaining this figure. Start with an explicit multilayer neural network and the anatomical human brain. Build 1 reveals the blue network-to-brain arrow: Test brain hypotheses. Neural networks are tractable computational test beds: vary architecture, learning objectives or experience; inspect internal representations; perturb units or connections; compare behavioral and neural predictions with independent biological evidence. The phrase model organism is an analogy to experimental systems, not a claim that an artificial network is a biological organism or an exact copy of the brain. Build 2 adds the orange brain-to-network arrow: Inspire better AI. Computational principles learned from neuroscience can suggest architectures, learning rules and memory mechanisms; whether these improve AI must be tested. The two directions describe scientific exchange, not physical causation between the depicted objects. The network drawing is schematic, not a trained model or measured activity. Keep the on-slide wording to the title, two object labels and two arrow captions; narrate the details. References: Richards et al. (2019), A deep learning framework for neuroscience, Nature Neuroscience 22:1761–1770, https://doi.org/10.1038/s41593-019-0520-2 ; Hassabis, Kumaran, Summerfield & Botvinick (2017), Neuroscience-Inspired Artificial Intelligence, Neuron 95:245–258, https://doi.org/10.1016/j.neuron.2017.06.011 . Brain image: NIAID Visual & Medical Arts, Ryan Kissinger (2024), Brain Lateral, NIH BioArt BIOART-000060, public domain, courtesy of NIAID; https://bioart.niaid.nih.gov/bioart/60.
 
-## 49. References
+## 51. References
 
 Optional reference · optional
 
